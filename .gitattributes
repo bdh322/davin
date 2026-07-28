@@ -1,0 +1,2 @@
+vendor/** linguist-vendored
+vendor/ffmpeg/ffmpeg-core.wasm binary

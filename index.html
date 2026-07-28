@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>크리스탈 볼 비디오 인코더</title>
+<meta name="description" content="3D 크리스탈 볼 비디오 플레이어(480x480)에 맞는 포맷으로 영상을 브라우저에서 바로 변환합니다. 서버 업로드 없음.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>">
+</head>
+<body>
+<main class="app">
+  <header class="header">
+    <h1>🔮 크리스탈 볼 비디오 인코더</h1>
+    <p class="subtitle">영상을 480×480 · H.264 · 30fps로 변환해 크리스탈 볼 플레이어에서 바로 재생되게 만듭니다.<br>
+    변환은 <strong>내 기기 안에서만</strong> 이루어지며 영상이 서버로 전송되지 않습니다.</p>
+  </header>
+
+  <section id="engineStatus" class="engine-status">
+    <span class="dot loading" id="engineDot"></span>
+    <span id="engineText">인코딩 엔진 로딩 중… (최초 1회, 약 32MB)</span>
+  </section>
+
+  <!-- 1단계: 파일 선택 -->
+  <section class="card" id="dropCard">
+    <h2><span class="step">1</span> 영상 선택</h2>
+    <div class="dropzone" id="dropzone">
+      <input type="file" id="fileInput" accept="video/*,.mp4,.mov,.avi,.mkv,.webm,.m4v,.3gp" hidden>
+      <div class="dropzone-inner">
+        <div class="dropzone-icon">🎬</div>
+        <p><strong>여기를 눌러 영상을 선택</strong>하거나<br>파일을 끌어다 놓으세요</p>
+        <p class="hint">MP4 · MOV · MKV · WEBM · AVI 등 대부분의 포맷 지원</p>
+      </div>
+    </div>
+    <div id="fileInfo" class="file-info" hidden></div>
+  </section>
+
+  <!-- 2단계: 미리보기 + 설정 -->
+  <section class="card" id="settingsCard" hidden>
+    <h2><span class="step">2</span> 미리보기 &amp; 설정</h2>
+
+    <div class="preview-wrap">
+      <div class="preview-frame" id="previewFrame">
+        <video id="previewVideo" playsinline muted loop controls></video>
+        <div class="circle-overlay" id="circleOverlay" hidden></div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="circleToggle">
+        <span>원형 표시 영역 미리보기 (크리스탈 볼에서 보이는 부분)</span>
+      </label>
+    </div>
+
+    <div class="settings-grid">
+      <div class="setting">
+        <label>화면 맞춤</label>
+        <div class="segmented" id="fitMode">
+          <button type="button" data-value="cover" class="active">중앙 크롭<small>화면 꽉 채움 (권장)</small></button>
+          <button type="button" data-value="contain">전체 표시<small>여백(레터박스) 추가</small></button>
+          <button type="button" data-value="stretch">늘리기<small>비율 무시</small></button>
+        </div>
+      </div>
+
+      <div class="setting">
+        <label for="bitrate">화질 (비트레이트)</label>
+        <select id="bitrate">
+          <option value="2000">절약 — 2,000 kbps (파일 작음)</option>
+          <option value="2500" selected>표준 — 2,500 kbps (권장)</option>
+          <option value="3000">고화질 — 3,000 kbps</option>
+          <option value="4000">최고 — 4,000 kbps (기기 한계치)</option>
+        </select>
+      </div>
+
+      <div class="setting">
+        <label for="fps">프레임 레이트</label>
+        <select id="fps">
+          <option value="30" selected>30 fps (권장)</option>
+          <option value="25">25 fps</option>
+          <option value="24">24 fps</option>
+        </select>
+      </div>
+
+      <div class="setting">
+        <label for="audio">오디오</label>
+        <select id="audio">
+          <option value="aac" selected>AAC 44.1kHz (권장)</option>
+          <option value="mp3">MP3 44.1kHz</option>
+          <option value="none">오디오 제거 (무음)</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="estimate" id="estimate"></p>
+
+    <button class="btn-primary" id="encodeBtn" disabled>⚡ 변환 시작</button>
+  </section>
+
+  <!-- 3단계: 진행 상황 -->
+  <section class="card" id="progressCard" hidden>
+    <h2><span class="step">3</span> 변환 중…</h2>
+    <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    <p class="progress-text" id="progressText">준비 중…</p>
+    <button class="btn-secondary" id="cancelBtn">취소</button>
+    <details class="log-details">
+      <summary>상세 로그 보기</summary>
+      <pre id="logOutput"></pre>
+    </details>
+  </section>
+
+  <!-- 4단계: 결과 -->
+  <section class="card" id="resultCard" hidden>
+    <h2><span class="step">4</span> 완료! 🎉</h2>
+    <div class="preview-wrap">
+      <div class="preview-frame result">
+        <video id="resultVideo" playsinline controls loop></video>
+        <div class="circle-overlay" id="resultCircleOverlay" hidden></div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="resultCircleToggle">
+        <span>원형 표시 영역 미리보기</span>
+      </label>
+    </div>
+    <p class="result-info" id="resultInfo"></p>
+    <a class="btn-primary" id="downloadBtn" download>⬇️ 변환된 영상 저장</a>
+    <button class="btn-secondary" id="restartBtn">다른 영상 변환하기</button>
+    <p class="hint">저장한 파일을 크리스탈 볼 기기의 메모리(또는 SD카드)에 복사하면 됩니다.</p>
+  </section>
+
+  <footer class="footer">
+    <details>
+      <summary>출력 사양 자세히</summary>
+      <ul>
+        <li>해상도: 480 × 480 (1:1 정방형)</li>
+        <li>비디오: H.264 (AVC) Main Profile, yuv420p</li>
+        <li>오디오: AAC 또는 MP3, 44,100 Hz</li>
+        <li>프레임: 30fps (기기 보드 성능상 60fps 비권장)</li>
+        <li>비트레이트: 2,000 ~ 4,000 kbps</li>
+        <li>컨테이너: MP4 (faststart)</li>
+      </ul>
+    </details>
+    <p class="hint">긴 영상(10분 이상)이나 큰 파일(500MB 이상)은 휴대폰 메모리 한계로 실패할 수 있습니다. 그럴 땐 PC 브라우저에서 변환하세요.</p>
+  </footer>
+</main>
+
+<script src="vendor/ffmpeg/util.js"></script>
+<script src="vendor/ffmpeg/ffmpeg.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
