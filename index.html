@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>크리스탈 볼 비디오 인코더</title>
-<meta name="description" content="3D 크리스탈 볼 비디오 플레이어(480x480)에 맞는 포맷으로 영상을 브라우저에서 바로 변환합니다. 서버 업로드 없음.">
+<meta name="description" content="3D 크리스탈 볼 비디오 플레이어(480x480)에 맞는 MP4·GIF·JPG로 영상과 사진을 브라우저에서 바로 변환합니다. 서버 업로드 없음.">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>">
 </head>
@@ -12,8 +12,8 @@
 <main class="app">
   <header class="header">
     <h1>🔮 크리스탈 볼 비디오 인코더</h1>
-    <p class="subtitle">영상을 480×480 · H.264 · 30fps로 변환해 크리스탈 볼 플레이어에서 바로 재생되게 만듭니다.<br>
-    변환은 <strong>내 기기 안에서만</strong> 이루어지며 영상이 서버로 전송되지 않습니다.</p>
+    <p class="subtitle">영상·사진을 480×480 크리스탈 볼 플레이어용 <strong>MP4 · GIF · JPG</strong>로 변환합니다.<br>
+    변환은 <strong>내 기기 안에서만</strong> 이루어지며 파일이 서버로 전송되지 않습니다.</p>
   </header>
 
   <section id="engineStatus" class="engine-status">
@@ -23,13 +23,13 @@
 
   <!-- 1단계: 파일 선택 -->
   <section class="card" id="dropCard">
-    <h2><span class="step">1</span> 영상 선택</h2>
+    <h2><span class="step">1</span> 영상 · 사진 선택</h2>
     <div class="dropzone" id="dropzone">
-      <input type="file" id="fileInput" accept="video/*,.mp4,.mov,.avi,.mkv,.webm,.m4v,.3gp" hidden>
+      <input type="file" id="fileInput" accept="video/*,image/*,.mp4,.mov,.avi,.mkv,.webm,.m4v,.3gp,.jpg,.jpeg,.png,.webp,.gif,.bmp" hidden>
       <div class="dropzone-inner">
         <div class="dropzone-icon">🎬</div>
-        <p><strong>여기를 눌러 영상을 선택</strong>하거나<br>파일을 끌어다 놓으세요</p>
-        <p class="hint">MP4 · MOV · MKV · WEBM · AVI 등 대부분의 포맷 지원</p>
+        <p><strong>여기를 눌러 영상이나 사진을 선택</strong>하거나<br>파일을 끌어다 놓으세요</p>
+        <p class="hint">영상: MP4 · MOV · MKV · WEBM · AVI 등 → MP4/GIF<br>사진: JPG · PNG · WEBP 등 → JPG</p>
       </div>
     </div>
     <div id="fileInfo" class="file-info" hidden></div>
@@ -42,6 +42,7 @@
     <div class="preview-wrap">
       <div class="preview-frame" id="previewFrame">
         <video id="previewVideo" playsinline muted loop controls></video>
+        <img id="previewImage" alt="미리보기" hidden>
         <div class="circle-overlay" id="circleOverlay" hidden></div>
       </div>
       <label class="toggle">
@@ -51,6 +52,14 @@
     </div>
 
     <div class="settings-grid">
+      <div class="setting" id="formatSetting">
+        <label>출력 형식</label>
+        <div class="segmented two" id="outFormat">
+          <button type="button" data-value="mp4" class="active">MP4 영상<small>소리 포함 (권장)</small></button>
+          <button type="button" data-value="gif">GIF 움짤<small>소리 없음 · 자동 반복</small></button>
+        </div>
+      </div>
+
       <div class="setting">
         <label>화면 맞춤</label>
         <div class="segmented" id="fitMode">
@@ -60,7 +69,7 @@
         </div>
       </div>
 
-      <div class="setting">
+      <div class="setting" data-for="mp4">
         <label for="bitrate">화질 (비트레이트)</label>
         <select id="bitrate">
           <option value="2000">절약 — 2,000 kbps (파일 작음)</option>
@@ -70,7 +79,7 @@
         </select>
       </div>
 
-      <div class="setting">
+      <div class="setting" data-for="mp4">
         <label for="fps">프레임 레이트</label>
         <select id="fps">
           <option value="30" selected>30 fps (권장)</option>
@@ -79,13 +88,33 @@
         </select>
       </div>
 
-      <div class="setting">
+      <div class="setting" data-for="mp4">
         <label for="audio">오디오</label>
         <select id="audio">
           <option value="aac" selected>AAC 44.1kHz (권장)</option>
           <option value="mp3">MP3 44.1kHz</option>
           <option value="none">오디오 제거 (무음)</option>
         </select>
+      </div>
+
+      <div class="setting" data-for="gif" hidden>
+        <label for="gifFps">GIF 프레임 레이트</label>
+        <select id="gifFps">
+          <option value="15">15 fps (부드러움 · 파일 큼)</option>
+          <option value="12" selected>12 fps (권장)</option>
+          <option value="10">10 fps (파일 작음)</option>
+        </select>
+        <p class="hint left">GIF는 소리가 없고 파일이 큽니다. 120초 이하 짧은 영상에 권장해요.</p>
+      </div>
+
+      <div class="setting" data-for="jpg" hidden>
+        <label for="jpgQuality">JPG 품질</label>
+        <select id="jpgQuality">
+          <option value="0.92">최고 (92%)</option>
+          <option value="0.85" selected>고화질 (85%, 권장)</option>
+          <option value="0.75">표준 (75%)</option>
+        </select>
+        <p class="hint left">사진은 480×480으로 비율에 맞게 잘리고 용량이 줄어듭니다.</p>
       </div>
     </div>
 
@@ -112,6 +141,7 @@
     <div class="preview-wrap">
       <div class="preview-frame result">
         <video id="resultVideo" playsinline controls loop></video>
+        <img id="resultImage" alt="변환 결과" hidden>
         <div class="circle-overlay" id="resultCircleOverlay" hidden></div>
       </div>
       <label class="toggle">
@@ -129,12 +159,9 @@
     <details>
       <summary>출력 사양 자세히</summary>
       <ul>
-        <li>해상도: 480 × 480 (1:1 정방형)</li>
-        <li>비디오: H.264 (AVC) Main Profile, yuv420p</li>
-        <li>오디오: AAC 또는 MP3, 44,100 Hz</li>
-        <li>프레임: 30fps (기기 보드 성능상 60fps 비권장)</li>
-        <li>비트레이트: 2,000 ~ 4,000 kbps</li>
-        <li>컨테이너: MP4 (faststart)</li>
+        <li>MP4: 480×480 · H.264 Main · yuv420p · 30fps · 2,000~4,000kbps · AAC/MP3 44.1kHz · faststart</li>
+        <li>GIF: 480×480 · 10~15fps · 256색 팔레트 최적화 · 무한 반복 · 무음</li>
+        <li>JPG: 480×480 · 비율 맞춤 크롭/여백 · 품질 75~92%</li>
       </ul>
     </details>
     <p class="hint">긴 영상(10분 이상)이나 큰 파일(500MB 이상)은 휴대폰 메모리 한계로 실패할 수 있습니다. 그럴 땐 PC 브라우저에서 변환하세요.</p>
