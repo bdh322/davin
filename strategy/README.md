@@ -1,6 +1,6 @@
 # 전략 노트북 — 차세대 사업 탐색 (미디어아트 → 다음 세대)
 
-> 작성 시작: 2026-10-01 · 작성자: 협 + Claude · 상태: **초안(리서치 1차 반영)**
+> 작성 시작: 2026-10-01 · 작성자: 협 + Claude · 상태: **초안(리서치 8트랙 1차 반영 완료, 협 답변 대기)**
 > 이 폴더는 세션이 초기화돼도 남는 "메모장"이다. 새 세션에서는 이 README부터 읽는다.
 
 ## 0. 이 노트북의 목적
@@ -29,7 +29,8 @@
 | `04-design-principles/participation-design.md` | 대중 참여 설계 원칙(HCI 연구+실무) 체크리스트 | DP-xx |
 | `90-questions/open-questions.md` | 협에게 묻는 질문 목록(답하면 전략이 바뀌는 것 위주) | Q-xx |
 | `91-decisions/decision-log.md` | 결정 기록 | DEC-xx |
-| `99-sources/sources.md` | 출처 목록(등급 A/B/C) | SRC-xx |
+| `99-sources/sources.md` | 출처 목록(8트랙 통합, ~830행, 등급 A/B/C) | SRC |
+| `99-sources/raw/` | 리서치 트랙 원문 보고서 8편(A~H) | — |
 | `glossary.md` | 용어집 | — |
 | `CHANGELOG.md` | 변경 이력 | — |
 
@@ -40,6 +41,18 @@
 - 문서 간 참조는 ID로 한다. 새 항목은 해당 문서 끝 번호 다음을 쓴다. 번호는 재사용·재정렬하지 않는다.
 - 출처 등급: **A** 공식·1차(정부·공시·산업협회·논문) / **B** 주요 언론·전문지 / **C** 블로그·커뮤니티·업체 홍보. 수치 뒤에 `[A]`처럼 표기. 미검증은 `[미확인]`.
 - 상태 태그: `초안` → `검토` → `확정`. 가설은 `H:` 접두어, 사실은 접두어 없음.
+
+## 2.5 리서치 트랙 ↔ 문서 매핑
+| 트랙 | 주제 | 반영 문서 |
+|---|---|---|
+| A | 글로벌 참여형 스크린 사례 32건·실패 9건, QR·DOOH 통계 | `dooh-market-global.md`, `01-cases.md` |
+| B | 국내 옥외광고 통계, 자유표시구역, 구좌 호가, 팬덤 광고, 법령 13항목, 시장 축소 증거 | `dooh-market-korea.md`, `problem-statement.md`, `06-risks-legal.md`, `01-cases.md` §4 |
+| C | 아키텍처 3경로, 플레이어·미디어서버 문서 검증, 백엔드 비용, r/place 등 패턴, QR 가독성, 모더레이션 스택, 비용·공수 | `04-workflow-architecture.md` |
+| D | 벤치마크 40+사 수익모델·가격, 9패턴, 캐시카우 원칙 10 | `05-business-model.md`, `07-competitors-vendors.md` |
+| E | HCI 논문(허니팟·퍼널·Looking Glass 등), 업계 가이드, Sixteen:Nine 10년, 한국 특수성, 포맷 평가 | `04-design-principles/participation-design.md`, `03-content-formats.md` |
+| F | 인접 산업 23개 사이징·스코어 | `candidates-scoring.md` |
+| G | 디스트릭트·닷밀 재무, 일본·글로벌 피벗 30여 사, 성패 패턴 10 | `peer-pivots.md`, `problem-statement.md` §3 |
+| H | CUE·Vixi·Monterosa·PixMob·팬라이트 등 참여 플랫폼, 혼잡 실측, 스폰서 구조 | `07-competitors-vendors.md` §5, `01-cases.md` §5, `04-workflow-architecture.md` §5.5 |
 
 ## 3. 읽는 순서 (새 세션 권장)
 1. `00-capabilities` → 2. `01-market-context/problem-statement.md` → 3. `02-new-industry-candidates/candidates-scoring.md` → 4. `03-qr-interactive/00-overview.md` → 5. `05-business-model.md` → 6. `90-questions`
