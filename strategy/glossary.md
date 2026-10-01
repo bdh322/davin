@@ -17,13 +17,13 @@
 | 허니팟 효과 | 누군가 상호작용하는 모습이 다른 사람의 참여를 유도하는 효과 | honeypot effect (Brignull & Rogers 2003) |
 | 디스플레이/인터랙션 블라인드니스 | 사람들이 공공 화면을 보지 않거나, 상호작용 가능함을 모르는 현상 | display blindness, interaction blindness (Müller 2010) |
 | 오디언스 퍼널 | 지나감→봄→미묘한 반응→직접 상호작용→반복→후속 행동 단계 | audience funnel (Michelis & Müller 2011) |
-| UGC | 관객 생성 콘텐츠(메시지·사진·드로잉). 공개 송출 시 모더레이션 필수 | user-generated content moderation |
+| UGC | **관객 생성 콘텐츠**(User-Generated Content). 관객이 폰으로 보낸 글·그림·사진·영상이 우리 스크린에 뜨는 것. 리스크 = 혐오·조롱·범죄자 사진 같은 것이 공개 화면에 송출되는 사고(Starbucks·Walkers 사례). "우리가 개발했으니 문제없다"와는 무관하며, 입력을 관객에게 열어두는 포맷에서만 발생 | user-generated content moderation |
 | 퀴싱 | QR 피싱. QR 신뢰도 저하 요인 | quishing |
 | App Clip / Instant App | 설치 없이 앱 일부를 실행하는 iOS/Android 기능 | App Clips, Instant Apps |
 | PWA | 설치 없이 앱처럼 쓰는 웹앱 | progressive web app |
 | 룸 코드 | QR 대신 숫자·문자 코드로 세션에 입장하는 방식(잭박스 등) | room code join |
 | ILDA | 쇼레이저 제어 표준(International Laser Display Association) | ILDA protocol |
-| 레이저챔버 | 협이 개발한 레이저 체험 공간(정의 확인 필요 Q-05) | laser chamber, laser show room |
+| 레이저챔버 | 협 개발 연출 기법. PVC 비닐 공에 포그+공기를 자동 주입·유지하고 레이저를 투사. 통과한 레이저는 무해. 영구 설치처 없음 | laser chamber, fog-filled sphere laser |
 | LBE | 위치 기반 엔터테인먼트(티켓 받는 체험 공간) | location-based entertainment |
 | 몰입형 전시 | 프로젝션·LED로 공간 전체를 채우는 티켓형 전시(반 고흐 전, 아르떼뮤지엄 등) | immersive exhibition |
 | 상설 운영 대행 | 구축 후 콘텐츠 교체·장비 유지·송출을 맡는 반복 계약 | managed service, content refresh subscription |
